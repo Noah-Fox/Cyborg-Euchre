@@ -7,16 +7,20 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
+import { MainComponent } from './main/main.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MatSlideToggleModule,
     MatButtonModule,
+    NgbModule,
   ],
   providers: [
     provideClientHydration(),
