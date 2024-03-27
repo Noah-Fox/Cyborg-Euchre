@@ -1,0 +1,37 @@
+player-a-user player-b-user player-a-bot player-b-bot 
+<start_round>
+<dealer> player-a-user 
+<card_up> QS
+player-b-user PASS
+player-a-bot PASS 
+player-b-bot PASS 
+player-a-user PASS 
+player-b-user D
+<start_trick> player-b-user 
+player-b-user AS 
+player-a-bot 9D
+player-b-bot 9S
+player-a-user TS 
+<trick_win> player-a-bot 
+player-a-bot AC 
+player-b-bot TC 
+player-a-user JS 
+player-b-user 9C 
+<trick_win> player-a-bot 
+player-a-bot AH
+player-b-bot KD 
+player-a-user AD 
+player-b-user QH 
+<trick_win> player-a-user 
+player-a-user JH 
+player-b-user QD 
+player-a-bot TD 
+player-b-bot JC 
+<trick_win> player-a-user 
+player-a-user KS
+player-b-user QC 
+player-a-bot KH 
+player-b-bot KC 
+<trick_win> player-a-user 
+<round_win> player-a 2 
+<score> player-a 2 player-b 0
