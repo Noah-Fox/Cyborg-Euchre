@@ -1,0 +1,9 @@
+{
+    "name": "mediator-backend",
+    "version": "0.0.1",
+    "description": "backend for cyborg euchre mediator",
+    "type": "module",
+    "dependencies": {
+        
+    }
+}
