@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MainComponent } from './main/main.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
+import { HttpClientModule } from '@angular/common/http';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,6 +23,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatSlideToggleModule,
     MatButtonModule,
     NgbModule,
+    HttpClientModule,
   ],
   providers: [
     provideClientHydration(),
