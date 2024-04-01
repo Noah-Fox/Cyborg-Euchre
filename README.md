@@ -8,6 +8,6 @@ To use for cyborg euchre gameplay, first deploy the backend from within mediator
 
     node app.js
 
-then deploy the frontend from within game-mediator 
+then deploy the frontend to port 4200 from within game-mediator 
 
     npm run start
