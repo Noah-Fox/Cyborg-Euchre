@@ -3,7 +3,10 @@
     <div class="col-3">
 
         <!-- LEFT PLAYER -->
-        <div class="row border"><p>USERNAME</p></div>
+        <div class="row border">
+            <p *ngIf="phase == 'selectPlayers'">SELECT PLAYER USERNAME</p>
+            <p *ngIf="phase != 'selectPlayers'">{{playerA}}</p>
+        </div>
         <div class="row border">
             <div class="col-8 border"><p>ICON</p></div>
             <div class="col-4">
@@ -13,7 +16,9 @@
         </div>
 
         <!-- LEFT BOT -->
-        <div class="row border mt-5"><p>USERNAME</p></div>
+        <div class="row border mt-5">
+            <p>{{playerB}}-bot</p>
+        </div>
         <div class="row border">
             <div class="col-8 border"><p>ICON</p></div>
             <div class="col-4">
@@ -62,7 +67,10 @@
     <div class="col-3">
 
         <!-- RIGHT PLAYER -->
-        <div class="row border"><p>USERNAME</p></div>
+        <div class="row border">
+            <p *ngIf="phase == 'selectPlayers'">SELECT PLAYER USERNAME</p>
+            <p *ngIf="phase != 'selectPlayers'">{{playerB}}</p>
+        </div>
         <div class="row border">
             <div class="col-4">
                 <div class="row border"><p>X</p></div>
@@ -72,7 +80,9 @@
         </div>
 
         <!-- RIGHT BOT -->
-        <div class="row border mt-5"><p>USERNAME</p></div>
+        <div class="row border mt-5">
+            <p>{{playerA}}-bot</p>
+        </div>
         <div class="row border">
             <div class="col-4">
                 <div class="row border"><p>X</p></div>
@@ -91,4 +101,92 @@
 
 <hr>
 
-<button mat-raised-button (click)="fromButton()">CLICK ME</button>
+
+
+
+
+<!-- Bottom menu -->
+
+
+<div class="row">
+    <div class="col-8">
+        <!-- Player username selection -->
+        <div *ngIf="phase == 'selectPlayers'" class="row">
+            <mat-form-field class="col-12">
+                <mat-label>Enter left player username</mat-label>
+                <input type="text" matInput [formControl]="playerASelection" required [matAutocomplete]="auto">
+    
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                    @for (option of playerNames; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                    }
+                </mat-autocomplete>
+            
+            </mat-form-field>
+
+            <mat-form-field class="col-12">
+                <mat-label>Enter right player username</mat-label>
+                <input type="text" matInput [formControl]="playerBSelection" required [matAutocomplete]="auto">
+    
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                    @for (option of playerNames; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                    }
+                </mat-autocomplete>
+            
+            </mat-form-field>
+        </div>
+
+        <!-- Card Selection -->
+        <div *ngIf="cardSelectionMenu" class="row">
+            <mat-radio-group class="col-12" [formControl]="cardValueSelection">
+                <mat-radio-button value="9">9</mat-radio-button>
+                <mat-radio-button value="T">10</mat-radio-button>
+                <mat-radio-button value="J">Jack</mat-radio-button>
+                <mat-radio-button value="Q">Queen</mat-radio-button>
+                <mat-radio-button value="K">King</mat-radio-button>
+                <mat-radio-button value="A">Ace</mat-radio-button>
+            </mat-radio-group>
+
+            <mat-radio-group class="col-12" [formControl]="cardSuitSelection">
+                <mat-radio-button value="H">Hearts</mat-radio-button>
+                <mat-radio-button value="D">Diamonds</mat-radio-button>
+                <mat-radio-button value="C">Clubs</mat-radio-button>
+                <mat-radio-button value="S">Spades</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <!-- <mat-form-field>
+            <mat-label>Enter name</mat-label>
+            <input type="text" matInput [formControl]="name" required [matAutocomplete]="auto">
+
+            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                @for (option of playerNames; track option) {
+                    <mat-option [value]="option">{{option}}</mat-option>
+                }
+            </mat-autocomplete>
+        
+        </mat-form-field>
+        
+        <mat-radio-group [formControl]="radioValues">
+            <mat-radio-button value="A">A</mat-radio-button>
+            <mat-radio-button value="B">B</mat-radio-button>
+        </mat-radio-group>
+        
+        <button mat-raised-button (click)="sendReq()">CLICK ME</button> -->
+
+        
+    </div>
+    <div class="col-4">
+        <div class="row">
+            <div class="col-12 border" style="height: 150px">
+                <h5>{{outputMessage}}</h5>
+            </div>
+            <div class="col-12">
+                <button mat-raised-button (click)="submitValues()">SUBMIT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
