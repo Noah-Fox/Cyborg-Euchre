@@ -22,12 +22,17 @@ export class MainComponent implements OnInit {
   playerA = '';
   playerB = '';
   players: string[] = [];
+  botACards: string[] = [];
+  botBCards: string[] = [];
+  cardsPlayed: string[] = ['','','',''];
 
+  dealerIndex: number = 0;
   dealer: string = '';
 
   phase = 'selectPlayers';
   outputMessage = 'Select players';
   cardSelectionMenu = false;
+  showTrumpOption = false;
 
   constructor(private http: HttpClient){ }
 
@@ -48,11 +53,49 @@ export class MainComponent implements OnInit {
       }
     }
     else if (this.phase == 'startGame'){
-      this.dealer = this.players[Math.floor(Math.random()*4)];
+      this.dealerIndex = Math.floor(Math.random()*4);
+      this.dealer = this.players[this.dealerIndex];
       this.nextPhase();
     }
     else if (this.phase == 'botBHand'){
+      if (this.botBCards.length == 5){
+        this.nextPhase();
+      }
+    }
+    else if (this.phase == 'botAHand'){
+      if (this.botACards.length == 5){
+        this.nextPhase();
+      }
+    }
+  }
 
+  addCard(): void{
+    if (this.phase == 'botAHand'){
+      if (this.cardSuitSelection.value && this.cardValueSelection.value && this.botACards.length < 5){
+        this.botACards.push(this.cardValueSelection.value + this.cardSuitSelection.value)
+      }
+    }
+    else if (this.phase == 'botBHand'){
+      if (this.cardSuitSelection.value && this.cardValueSelection.value && this.botBCards.length < 5){
+        this.botBCards.push(this.cardValueSelection.value + this.cardSuitSelection.value)
+      }
+    }
+    else if (this.phase == 'selectTrumpOption'){
+      if (this.cardSuitSelection.value && this.cardValueSelection.value){
+        this.cardsPlayed[this.dealerIndex] = this.cardValueSelection.value + this.cardSuitSelection.value;
+      }
+    }
+  }
+
+  removeCard(): void{
+    if (this.phase == 'botAHand'){
+      this.botACards.pop();
+    }
+    else if (this.phase == 'botBHand'){
+      this.botBCards.pop();
+    }
+    else if (this.phase == 'selectTrumpOption'){
+      this.cardsPlayed[this.dealerIndex] = '';
     }
   }
 
@@ -65,6 +108,15 @@ export class MainComponent implements OnInit {
       this.phase = 'botBHand';
       this.outputMessage = `${this.dealer} is dealer. Input cards dealt to ${this.players[3]}`;
       this.cardSelectionMenu = true;
+    }
+    else if (this.phase == 'botBHand'){
+      this.phase = 'botAHand';
+      this.outputMessage = `${this.dealer} is dealer. Input cards dealt to ${this.players[2]}`;
+    }
+    else if (this.phase == 'botAHand'){
+      this.phase = 'selectTrumpOption';
+      this.showTrumpOption = true;
+      this.outputMessage = `Input trump selection card`;
     }
   }
 

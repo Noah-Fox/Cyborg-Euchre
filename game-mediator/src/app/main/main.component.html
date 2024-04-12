@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <!-- LEFT BOT -->
+        <!-- LEFT BOT (BOT B) -->
         <div class="row border mt-5">
             <p>{{playerB}}-bot</p>
         </div>
@@ -28,7 +28,9 @@
         </div>
 
         <!-- BOT CARDS -->
-        <div class="row border mt-3" style="height: 80px">CARDS</div>
+        <div class="row border mt-3" style="height: 80px">
+            <div class="col-2" *ngFor="let card of botBCards">{{card}}</div>
+        </div>
     </div>
 
     
@@ -46,7 +48,10 @@
             <div class="col-3"></div>
             <div class="col-6 border">
                 <div class="row">
-                    <div class="col-6 border" style="height: 100px">
+                    <div *ngFor="let cardIndex of [0,1,3,2]" class="col-6 border" style="height: 100px">
+                        {{cardsPlayed[cardIndex]}}
+                    </div>
+                    <!-- <div class="col-6 border" style="height: 100px">
                         X
                     </div>
                     <div class="col-6 border" style="height: 100px">
@@ -54,10 +59,7 @@
                     </div>
                     <div class="col-6 border" style="height: 100px">
                         X
-                    </div>
-                    <div class="col-6 border" style="height: 100px">
-                        X
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="col-3"></div>
@@ -79,7 +81,7 @@
             <div class="col-8 border"><p>ICON</p></div>
         </div>
 
-        <!-- RIGHT BOT -->
+        <!-- RIGHT BOT (BOT A) -->
         <div class="row border mt-5">
             <p>{{playerA}}-bot</p>
         </div>
@@ -92,7 +94,9 @@
         </div>
         
         <!-- BOT CARDS -->
-        <div class="row border mt-3" style="height: 80px">CARDS</div>
+        <div class="row border mt-3" style="height: 80px">
+            <div class="col-2" *ngFor="let card of botACards">{{card}}</div>
+        </div>
     </div>
 
 
@@ -154,6 +158,9 @@
                 <mat-radio-button value="C">Clubs</mat-radio-button>
                 <mat-radio-button value="S">Spades</mat-radio-button>
             </mat-radio-group>
+
+            <button mat-raised-button class="col-6" (click)="addCard()">ADD CARD</button>
+            <button mat-raised-button class="col-6" (click)="removeCard()">REMOVE CARD</button>
         </div>
 
         <!-- <mat-form-field>
