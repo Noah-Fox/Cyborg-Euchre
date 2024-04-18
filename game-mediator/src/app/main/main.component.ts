@@ -19,15 +19,20 @@ export class MainComponent implements OnInit {
   cardValueSelection = new FormControl('');
   cardSuitSelection = new FormControl('');
 
+  trumpCardDecision = new FormControl('');//select | pass
+  trumpSelection = new FormControl('');//H | D | S | C | pass
+
   playerA = '';
   playerB = '';
   players: string[] = [];
   botACards: string[] = [];
   botBCards: string[] = [];
   cardsPlayed: string[] = ['','','',''];
+  trump: string = '';
 
   dealerIndex: number = 0;
   dealer: string = '';
+  onTurn: number = 0;
 
   phase = 'selectPlayers';
   outputMessage = 'Select players';
@@ -40,6 +45,7 @@ export class MainComponent implements OnInit {
 
   }
 
+  //Manages validation and data changes when Submit button is pressed
   submitValues(): void{
     if (this.phase == 'selectPlayers'){
       let lVal = this.playerASelection.value;
@@ -67,8 +73,40 @@ export class MainComponent implements OnInit {
         this.nextPhase();
       }
     }
+    else if (this.phase == 'selectTrumpOption'){
+      if (this.cardsPlayed[this.dealerIndex] != ''){
+        this.nextPhase();
+      }
+    }
+    else if (this.phase == 'inputTrumpCardDecision' || this.phase == 'outputTrumpCardDecision'){
+      if (this.trumpCardDecision.value == 'select'){
+        this.trump = this.cardsPlayed[this.dealerIndex][1];
+        this.nextPhase();
+      }
+      else if (this.trumpCardDecision.value == 'pass'){
+        this.nextPhase();
+      }
+    }
+    else if (this.phase == 'inputTrumpSelection' || this.phase == 'outputTrumpSelection'){
+      if (this.onTurn == this.dealerIndex){
+        if (this.trumpSelection.value && this.trumpSelection.value != 'pass'){
+          this.trump = this.trumpSelection.value;
+          this.nextPhase();
+        }
+      }
+      else if (this.trumpSelection.value) {
+        if (this.trumpSelection.value != 'pass'){
+          this.trump = this.trumpSelection.value;
+          this.nextPhase();
+        }
+        else {
+          this.nextPhase();
+        }
+      }
+    }
   }
 
+  //changes data when Add Card is selected on a card selection menu
   addCard(): void{
     if (this.phase == 'botAHand'){
       if (this.cardSuitSelection.value && this.cardValueSelection.value && this.botACards.length < 5){
@@ -87,6 +125,7 @@ export class MainComponent implements OnInit {
     }
   }
 
+  //changes data when Remove Card is selected on a card selection menu
   removeCard(): void{
     if (this.phase == 'botAHand'){
       this.botACards.pop();
@@ -99,24 +138,111 @@ export class MainComponent implements OnInit {
     }
   }
 
+  //Handles changing from one phase to the next, and setting output messages
   nextPhase(): void{
     if (this.phase == 'selectPlayers'){
+      //Start game
       this.phase = 'startGame';
       this.outputMessage = 'Press SUBMIT to start game';
     }
     else if (this.phase == 'startGame'){
+      //Input Bot B's hand
       this.phase = 'botBHand';
       this.outputMessage = `${this.dealer} is dealer. Input cards dealt to ${this.players[3]}`;
       this.cardSelectionMenu = true;
     }
     else if (this.phase == 'botBHand'){
+      //Input Bot A's Hand
       this.phase = 'botAHand';
       this.outputMessage = `${this.dealer} is dealer. Input cards dealt to ${this.players[2]}`;
     }
     else if (this.phase == 'botAHand'){
+      //Input trump card laid up
       this.phase = 'selectTrumpOption';
       this.showTrumpOption = true;
       this.outputMessage = `Input trump selection card`;
+    }
+    else if (this.phase == 'selectTrumpOption'){
+      this.onTurn = (this.dealerIndex+1)%4;
+      this.trump = '';
+      if (this.onTurn < 2){
+        //Input trump decision made by player
+        this.phase = 'inputTrumpCardDecision';
+        this.outputMessage = `Input ${this.playerNames[this.onTurn]}'s trump decision`;
+      }
+      else {
+        //Output trump decision made by bot
+        this.phase = 'outputTrumpCardDecision';
+        this.outputMessage = `${this.playerNames[this.onTurn]} declines`;
+      }
+    }
+    else if (this.phase == 'inputTrumpCardDecision' || this.phase == 'outputTrumpCardDecision'){
+      if (this.trump != ''){
+        if (this.dealerIndex < 2){
+          //Empty phase before starting trick
+          this.phase = 'startTrick';
+          this.outputMessage = 'Press submit to start trick';
+        }
+        else {
+          //Output which card bot replaces
+          this.phase = 'outputBotCardReplacement';
+          //TODO: botCall
+          //TODO: change botACards or botBCards, and cardsPlayed, and trump
+          this.outputMessage = `${this.dealer} replaces XX card with XX`;
+        }
+      }
+      else if (this.onTurn == this.dealerIndex){
+        this.onTurn = (this.onTurn+1) % 4;
+        if (this.onTurn < 2){
+          //Input trump selection made by player
+          this.phase = 'inputTrumpSelection';
+          this.outputMessage = `Input ${this.playerNames[this.onTurn]}'s trump selection`;
+        }
+        else {
+          //Output trump selection made by bot
+          this.phase = 'outputTrumpSelection';
+          //TODO: botCall
+          //TODO: if trump selected, change trump, cardsPlayed
+          this.outputMessage = `${this.playerNames[this.onTurn]} passes`;
+        }
+      }
+      else {
+        this.onTurn = (this.onTurn+1)%4;
+        if (this.onTurn < 2){
+          //Input trump decision made by player
+          this.phase = 'inputTrumpCardDecision';
+          this.outputMessage = `Input ${this.playerNames[this.onTurn]}'s trump decision`;
+        }
+        else {
+          //Output trump decision made by bot
+          this.phase = 'outputTrumpCardDecision';
+          //TODO: botCall
+          //TODO: if trump selected, change trump, possibly go to outputBotCardReplacement
+          this.outputMessage = `${this.playerNames[this.onTurn]} declines`;
+        }
+      }
+    }
+    else if (this.phase == 'inputTrumpSelection' || this.phase == 'outputTrumpSelection'){
+      if (this.trump != ''){
+        //Empty phase before starting trick
+        this.phase = 'startTrick';
+        this.outputMessage = 'Press submit to start trick';
+      }
+      else {
+        this.onTurn = (this.onTurn+1)%4;
+        if (this.onTurn < 2){
+          //Input trump selection made by player
+          this.phase = 'inputTrumpSelection';
+          this.outputMessage = `Input ${this.playerNames[this.onTurn]}'s trump selection`;
+        }
+        else {
+          //Output trump selection made by bot
+          this.phase = 'outputTrumpSelection';
+          //TODO: botCall
+          //TODO: if trump selected, change trump
+          this.outputMessage = `${this.playerNames[this.onTurn]} passes`;
+        }
+      }
     }
   }
 
